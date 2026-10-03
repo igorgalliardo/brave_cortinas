@@ -1,0 +1,3 @@
+export default function WhatsAppIcon() {
+ return <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.65" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M20.5 11.6a8.5 8.5 0 0 1-12.7 7.4L3 20.5l1.5-4.7A8.5 8.5 0 1 1 20.5 11.6Z"/><path fill="currentColor" stroke="none" d="M8.2 6.8c-.3 0-.7.2-1 .6-.4.5-.6 1.1-.5 1.8.1 1.4 1.2 3.2 2.7 4.6 1.6 1.5 3.6 2.3 4.9 2.2.8-.1 1.6-.5 1.9-1.1.2-.4.3-.8.1-1l-2-1c-.3-.1-.5-.1-.7.2l-.8 1c-.2.2-.4.2-.7.1-1.1-.5-2.4-1.7-2.9-2.7-.2-.3-.2-.5 0-.7l.6-.8c.2-.2.2-.4.1-.7L9 7.2c-.1-.3-.3-.4-.8-.4Z"/></svg>;
+}

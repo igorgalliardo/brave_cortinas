@@ -1,0 +1,4 @@
+import { ArrowDown, ArrowUpRight } from 'lucide-react';
+import { images, whatsappUrl } from '@/lib/config';
+import { CTA, Photo } from './UI';
+export default function Automation() { return (<section id="automacao" className="automation"><div className="automation-copy reveal"><p className="eyebrow">CONFORTO EM UM NOVO NÍVEL</p><h2>A luz acompanha<br/>o seu <em>ritmo.</em></h2><p>Persianas e cortinas motorizadas. Controle seus ambientes com praticidade e transforme cada momento do dia.</p><div className="automation-options"><span>Controle remoto</span><span>Automação</span><span>Acionamento inteligente</span><span>Integração residencial</span></div><CTA className="text-link dark">Conheça as soluções motorizadas</CTA></div><div className="automation-photo"><Photo src={images.automation} alt="Sala moderna com janelas amplas e proteção solar"/><span>TECNOLOGIA DISCRETA. CONFORTO PRESENTE.</span></div></section>); }

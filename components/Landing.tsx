@@ -1,0 +1,49 @@
+'use client';
+import { useEffect, useRef, useState, type FormEvent } from 'react';
+import { ArrowUpRight, ArrowRight, ArrowDown, Menu, X, ChevronLeft, ChevronRight, MessageCircle, Plus, Minus } from 'lucide-react';
+import { company, images, products, mapsUrl, whatsappUrl } from '@/lib/config';
+import Location from './Location';
+import Testimonials from './Testimonials';
+import Footer from './Footer';
+import { Brand, CTA, Photo } from './UI';
+import MainCTA from './MainCTA';
+import Automation from './Automation';
+import Process from './Process';
+import Features from './Features';
+import DesignBanner from './DesignBanner';
+import Products from './Products';
+import About from './About';
+import Hero from './Hero';
+import WhatsAppIcon from './WhatsAppIcon';
+const nav = [['Início','inicio'],['Sobre','sobre'],['Cortinas','cortinas'],['Persianas','persianas'],['Projetos','projetos'],['Diferenciais','diferenciais'],['Contato','contato']];
+const features = [['Projeto sob medida','Cada solução considera as dimensões, a iluminação e as características do seu ambiente.'],['Atendimento personalizado','Acompanhamento desde a escolha do modelo e tecido até a instalação.'],['Materiais selecionados','Tecidos e acabamentos cuidadosamente escolhidos para o seu projeto.'],['Instalação profissional','Atenção aos mínimos detalhes, do primeiro ajuste ao acabamento final.'],['Tecnologia e automação','Soluções motorizadas para trazer ainda mais conforto e praticidade.'],['Acabamento de alto padrão','Precisão, cuidado e qualidade em cada detalhe.']];
+const steps = [['Contato','Conte sobre seu ambiente e o que você procura.'],['Visita / medição','Analisamos o espaço e as medidas necessárias.'],['Escolha','Selecionamos tecidos, modelos e acabamentos.'],['Produção','Sua solução é produzida conforme o projeto.'],['Instalação','Realizamos a instalação e os ajustes finais.']];
+const projects = ['Luz que acolhe','Texturas em equilíbrio','Um refúgio particular','Elegância em cada detalhe','Arquitetura e conforto','Novas formas de viver'];
+export default function Landing() {
+ const [menu,setMenu]=useState(false),[scrolled,setScrolled]=useState(false),[lightbox,setLightbox]=useState<number|null>(null),[expanded,setExpanded]=useState(false),[status,setStatus]=useState('');
+ const closeRef=useRef<HTMLButtonElement>(null),previousFocus=useRef<HTMLElement|null>(null);
+ useEffect(()=>{ const scroll=()=>setScrolled(window.scrollY>40);scroll();window.addEventListener('scroll',scroll,{passive:true}); const observer=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');observer.unobserve(e.target);}}),{threshold:.08});document.querySelectorAll('.reveal').forEach(e=>observer.observe(e));return()=>{window.removeEventListener('scroll',scroll);observer.disconnect();};},[]);
+ useEffect(()=>{if(lightbox===null&&!menu)return;previousFocus.current=document.activeElement as HTMLElement;document.body.style.overflow='hidden'; if(lightbox!==null)closeRef.current?.focus();const key=(e:KeyboardEvent)=>{if(e.key==='Escape'){setMenu(false);setLightbox(null);}if(lightbox!==null&&e.key==='ArrowRight')setLightbox((lightbox+1)%6);if(lightbox!==null&&e.key==='ArrowLeft')setLightbox((lightbox+5)%6);if(e.key==='Tab'){const scope=document.querySelector(lightbox!==null?'.lightbox':'.mobile-nav');const els=scope?.querySelectorAll<HTMLElement>('button, a');if(els?.length){const first=els[0],last=els[els.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}}}};document.addEventListener('keydown',key);if(menu)document.querySelector<HTMLElement>('.mobile-nav a')?.focus();return()=>{document.body.style.overflow='';document.removeEventListener('keydown',key);previousFocus.current?.focus();};},[lightbox,menu]);
+ function submit(e:FormEvent<HTMLFormElement>){e.preventDefault();const data=new FormData(e.currentTarget);if(!company.whatsapp){setStatus('O canal de atendimento está sendo preparado. Seu pedido não foi enviado. Assim que o WhatsApp oficial for cadastrado, você poderá encaminhar seu orçamento por aqui.');return;}const message=`${company.message}\n\nNome: ${data.get('nome')}\nWhatsApp: ${data.get('telefone')}\nE-mail: ${data.get('email')}\nCidade: ${data.get('cidade')}\nAmbiente: ${data.get('ambiente')}\nMensagem: ${data.get('mensagem')}`;window.open(whatsappUrl(message),'_blank','noopener,noreferrer');setStatus('Seu pedido foi preparado. Confirme o envio na conversa do WhatsApp.');}
+ return <><a className="skip" href="#sobre">Pular para o conteúdo</a><header className={scrolled||menu?'header solid':'header'}><a href="#inicio" aria-label="Brave — início"><Brand/></a><nav className="desktop-nav" aria-label="Menu principal">{nav.map(([label,id])=><a key={id} href={`#${id}`}>{label}</a>)}</nav><CTA className="header-cta">Solicitar orçamento</CTA><button className="menu-toggle" aria-expanded={menu} aria-controls="mobile-nav" aria-label={menu?'Fechar menu':'Abrir menu'} onClick={()=>setMenu(!menu)}>{menu?<X/>:<Menu/>}</button>{menu&&<nav id="mobile-nav" className="mobile-nav" aria-label="Menu mobile">{nav.map(([label,id])=><a key={id} href={`#${id}`} onClick={()=>setMenu(false)}>{label}<ArrowUpRight size={20}/></a>)}<button onClick={()=>setMenu(false)}>Fechar menu</button></nav>}</header>
+ <main><Hero />
+ <div className="signature-strip"><span>SOB MEDIDA PARA VOCÊ</span><span>Design & conforto</span><i/><span>Materiais selecionados</span><i/><span>Cuidado em cada detalhe</span></div>
+ <About />
+ <Products products={products}/>
+ <DesignBanner />
+ <Features features={features}/>
+
+ <section id="projetos" className="section projects"><div className="section-heading reveal"><div><p className="eyebrow">UM OLHAR SOBRE AS POSSIBILIDADES</p><h2>Ambientes que inspiram.<br/><em>Detalhes que transformam.</em></h2></div><p>Uma seleção de referências para imaginar<br/>o próximo capítulo do seu espaço.</p></div><div className={`project-grid ${expanded?'expanded':''}`}>{images.projects.map((src,i)=><button className={`project project-${i} reveal`} key={src} onClick={()=>setLightbox(i)} aria-label={`Ampliar imagem: ${projects[i]}`}><Photo src={src} alt={projects[i]}/><span>{projects[i]}<Plus size={20}/></span></button>)}</div><div className="gallery-end"><p>Imagens de inspiração. Projetos oficiais da Brave em breve.</p><button className="text-link dark" onClick={()=>setExpanded(!expanded)}>{expanded?'Recolher galeria':'Ver mais projetos'}{expanded?<Minus size={18}/>:<Plus size={18}/>}</button></div></section>
+ <Automation />
+ <Process steps={steps}/>
+ <Testimonials />
+
+ <section id="contato" className="section contact"><div className="contact-copy"><p className="eyebrow">O SEU PROJETO COMEÇA AQUI</p><h2>Vamos conversar<br/>sobre o seu <em>ambiente?</em></h2><p>Compartilhe sua ideia. Vamos encontrar a solução que faz sentido para você.</p><dl><dt>WHATSAPP</dt><dd><a href={whatsappUrl()} target="_blank" rel="noopener noreferrer">{company.whatsappLabel}<ArrowUpRight size={14}/></a></dd><dt>ENDEREÇO</dt><dd><address>{company.address}<br/>{company.neighborhood}<br/>{company.city} - {company.state}<br/>CEP {company.postalCode}</address><a className="contact-directions" href={mapsUrl} target="_blank" rel="noopener noreferrer">Como chegar<ArrowUpRight size={14}/></a></dd>{company.instagram&&<><dt>INSTAGRAM</dt><dd><a href={company.instagram} target="_blank" rel="noopener noreferrer">Nosso perfil</a></dd></>}{company.email&&<><dt>E-MAIL</dt><dd><a href={`mailto:${company.email}`}>{company.email}</a></dd></>}{company.hours&&<><dt>ATENDIMENTO</dt><dd>{company.hours}</dd></>}</dl></div><form onSubmit={submit}><div className="form-grid"><label>Seu nome<input name="nome" placeholder="Como podemos chamar você?" required autoComplete="name" maxLength={100}/></label><label>Telefone / WhatsApp<input name="telefone" type="tel" placeholder="(00) 00000-0000" required autoComplete="tel" pattern={'[0-9+\\s\\(\\)\\-]{10,20}'} maxLength={20}/></label><label>E-mail<input name="email" type="email" placeholder="voce@exemplo.com" autoComplete="email" maxLength={150}/></label><label>Cidade<input name="cidade" placeholder="Onde fica o seu projeto?" required autoComplete="address-level2" maxLength={100}/></label></div><label htmlFor="ambiente">Tipo de ambiente</label><select id="ambiente" name="ambiente" required defaultValue=""><option value="" disabled>Selecione o ambiente</option>{['Residência','Apartamento','Escritório','Ambiente comercial','Outro'].map(v=><option key={v}>{v}</option>)}</select><label>Conte sobre o seu projeto<textarea name="mensagem" rows={3} placeholder="Suas ideias, necessidades e o que você imagina para o espaço…" maxLength={2000}/></label><button className="button black" type="submit">Solicitar orçamento<ArrowUpRight size={18}/></button><p className="form-note">Seus dados serão usados apenas para preparar seu atendimento pelo WhatsApp. O envio é confirmado por você na conversa.</p><p role="status" className="form-status">{status}</p></form></section>
+ <Location />
+ <MainCTA />
+ </main>
+ <Footer /><CTA className="floating"><WhatsAppIcon/></CTA>
+ {lightbox!==null&&<div className="lightbox" role="dialog" aria-modal="true" aria-label="Galeria de ambientes" onClick={()=>setLightbox(null)}><button ref={closeRef} className="lightbox-close" aria-label="Fechar galeria" onClick={()=>setLightbox(null)}><X/></button><button aria-label="Imagem anterior" onClick={e=>{e.stopPropagation();setLightbox((lightbox+5)%6);}}><ChevronLeft/></button><figure onClick={e=>e.stopPropagation()}><img src={images.projects[lightbox]} alt={projects[lightbox]}/><figcaption>{projects[lightbox]} — {lightbox+1} / 6</figcaption></figure><button aria-label="Próxima imagem" onClick={e=>{e.stopPropagation();setLightbox((lightbox+1)%6);}}><ChevronRight/></button></div>}</>;
+}
+
+
