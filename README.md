@@ -15,7 +15,7 @@ Abra http://localhost:3000. Produção: `npm run build` e `npm start`.
 
 `lib/config.ts` centraliza WhatsApp, mensagem, endereço, cidade, CEP, siteUrl, catálogo de produtos e depoimentos. Telefone oficial: (19) 98276-8475. Endereço: R. Izaíra Ôngaro Zague, 136, Jardim São Carlos, Sumaré - SP, CEP 13170-110.
 
-Configure o domínio público em siteUrl antes de publicar: gera canonical e sitemap. E-mail, Instagram e horário não foram informados e ficam ocultos enquanto vazios. Schema LocalBusiness usa os dados reais fornecidos, sem avaliações, fundação ou outros dados inventados.
+Configure NEXT_PUBLIC_SITE_URL antes do build de publicação: gera canonical e sitemap. O workflow do GitHub Pages configura essa variável automaticamente. E-mail, Instagram e horário não foram informados e ficam ocultos enquanto vazios. Schema LocalBusiness usa os dados reais fornecidos, sem avaliações, fundação ou outros dados inventados.
 
 ## Atendimento e localização
 
@@ -37,4 +37,11 @@ Fontes hospedadas em public/fonts com font-display swap, fotos WebP locais com v
 A imagem public/images/hero/cinematic.webp (e cinematic-small.webp) foi criada com a ferramenta integrada image_gen como referência conceitual, sem representar um projeto real da Brave. A logo oficial não foi recriada.
 
 Prompt utilizado: fotografia editorial arquitetônica fotorrealista de uma sala contemporânea sofisticada, janelas do piso ao teto, cortinas de linho translúcidas e tecido taupe, sofá curvo claro, detalhes de nogueira e mesa de travertino; luz de fim de tarde, sombras naturais, composição horizontal 16:9, área tranquila à esquerda para o título; sem pessoas, texto, logo ou marca-d'água. O original gerado foi convertido para WebP em 1600 e 640 pixels para uso no site.
+
+
+## GitHub Pages
+
+Projeto preparado para exportação estática (`out/`) e publicação automática em `.github/workflows/pages.yml`. Consulte PUBLICAR-GITHUB-PAGES.md. O domínio agora é configurado por NEXT_PUBLIC_SITE_URL; o subdiretório por NEXT_PUBLIC_BASE_PATH. O workflow define ambos a partir do GitHub Pages. Para prévia estática local: `npm run build` e `npm run preview` (porta 3001).
+
+Textos principais ampliados para 16 px, descrição do hero para 18 px no desktop e menus, botões e rodapé ajustados para facilitar a leitura. O botão flutuante exibe somente um ícone dourado do WhatsApp, com nome acessível para leitores de tela.
 
